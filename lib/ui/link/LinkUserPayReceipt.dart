@@ -1,4 +1,3 @@
-
 import '../base/libraryExport.dart';
 
 class LinkUserPayReceiptScreen extends StatefulWidget {

@@ -1,6 +1,4 @@
-
 import '../base/libraryExport.dart';
-import 'PartyMasterAddPayment.dart';
 
 class PartyPaymentScreen extends StatefulWidget {
   final String name;

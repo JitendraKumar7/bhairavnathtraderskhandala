@@ -1,5 +1,3 @@
-
-
 import '../ui/base/libraryExport.dart';
 
 class CarouselSlider extends StatelessWidget {

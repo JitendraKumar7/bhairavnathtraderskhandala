@@ -1,5 +1,3 @@
-
-
 import '../base/libraryExport.dart';
 
 class LedgerViewScreen extends StatefulWidget {

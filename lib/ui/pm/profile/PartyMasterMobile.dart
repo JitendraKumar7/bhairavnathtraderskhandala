@@ -1,7 +1,4 @@
-
-
 import '../../base/libraryExport.dart';
-import 'PartyMasterRegister.dart';
 
 class PartyMasterMobileScreen extends StatefulWidget {
   final String logo;

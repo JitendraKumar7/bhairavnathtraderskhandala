@@ -1,4 +1,3 @@
-
 import '../base/libraryExport.dart';
 
 class AdminPartyMasterScreen extends StatefulWidget {

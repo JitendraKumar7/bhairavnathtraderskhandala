@@ -1,22 +1,4 @@
-
-import '../AboutScreen.dart';
-import '../BankingScreen.dart';
-import '../ContactScreen.dart';
-import '../DashboardScreen.dart';
-import '../GalleryScreen.dart';
-import '../LocationScreen.dart';
-import '../OffersScreen.dart';
-import '../RegistrationScreen.dart';
-import '../SupportScreen.dart';
-import '../WebStoreScreen.dart';
 import '../base/libraryExport.dart';
-import 'AdminLedger.dart';
-import 'AdminPartyMaster.dart';
-import 'AdminPayReceipt.dart';
-import 'AdminProformaInvoice.dart';
-import 'AdminPurchaseInvoice.dart';
-import 'AdminSalesInvoice.dart';
-import 'AdminSalesOrder.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   final KonnectDetails konnectDetails;
@@ -110,11 +92,11 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
             size: 48,
           )
         : FadeInImage.assetNetwork(
-      width: 80,
-      height: 80,
-      image: profile.image,
-      placeholder: 'images/iv_empty.png',
-    );
+            width: 80,
+            height: 80,
+            image: profile.image,
+            placeholder: 'images/iv_empty.png',
+          );
   }
 
   String getProfileName() {
@@ -302,8 +284,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  DashboardScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                DashboardScreen(widget.konnectDetails),
+                          ),
                           (Route<dynamic> route) => false);
                     }).show();
               },
@@ -405,8 +388,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  LocationScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                LocationScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_address.png',
@@ -417,8 +401,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ContactScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                ContactScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_contact.png',
@@ -454,8 +439,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  OffersScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                OffersScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_offers.png',
@@ -466,8 +452,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  GalleryScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                GalleryScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_gallery.png',
@@ -489,8 +476,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  BankingScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                BankingScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_banking.png',
@@ -501,8 +489,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  RegisterScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                RegisterScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_registration.png',
@@ -513,8 +502,9 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  SupportScreen(widget.konnectDetails)),
+                            builder: (BuildContext context) =>
+                                SupportScreen(widget.konnectDetails),
+                          ),
                         );
                       },
                       asset: 'images/home/ic_support.png',
@@ -522,6 +512,25 @@ class _AdminDashboardState extends State<AdminDashboardScreen> {
                 ],
               ),
             ),
+          ),
+          GFButton(
+            size: 50,
+            fullWidthButton: true,
+            type: GFButtonType.solid,
+            color: Colors.blue.shade300,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => InAppWebViewPage(),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.video_call,
+              color: Colors.white,
+            ),
+            text: '',
           ),
         ],
       ),

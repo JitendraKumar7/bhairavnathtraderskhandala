@@ -1,18 +1,4 @@
-
-import '../AboutScreen.dart';
-import '../BankingScreen.dart';
-import '../ContactScreen.dart';
-import '../DashboardScreen.dart';
-import '../GalleryScreen.dart';
-import '../LocationScreen.dart';
-import '../OffersScreen.dart';
-import '../RegistrationScreen.dart';
-import '../SupportScreen.dart';
-import '../WebStoreScreen.dart';
 import '../base/libraryExport.dart';
-import 'LinkUserPayReceipt.dart';
-import 'LinkUserProformaInvoice.dart';
-import 'LinkUserSalesInvoice.dart';
 
 class LinkUserDashboardScreen extends StatefulWidget {
   final KonnectDetails konnectDetails;
@@ -101,15 +87,15 @@ class _LinkUserDashboardState extends State<LinkUserDashboardScreen> {
   Widget getProfile() {
     return profile.image.isEmpty
         ? Icon(
-      Icons.perm_identity,
-      size: 48,
-    )
+            Icons.perm_identity,
+            size: 48,
+          )
         : FadeInImage.assetNetwork(
-      width: 80,
-      height: 80,
-      image: profile.image,
-      placeholder: 'images/iv_empty.png',
-    );
+            width: 80,
+            height: 80,
+            image: profile.image,
+            placeholder: 'images/iv_empty.png',
+          );
   }
 
   String getProfileName() {
@@ -508,6 +494,25 @@ class _LinkUserDashboardState extends State<LinkUserDashboardScreen> {
                 ],
               ),
             ),
+          ),
+          GFButton(
+            size: 50,
+            fullWidthButton: true,
+            type: GFButtonType.solid,
+            color: Colors.blue.shade300,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => InAppWebViewPage(),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.video_call,
+              color: Colors.white,
+            ),
+            text: '',
           ),
         ],
       ),

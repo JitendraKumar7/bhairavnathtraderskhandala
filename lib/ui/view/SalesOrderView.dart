@@ -1,5 +1,3 @@
-
-
 import '../base/libraryExport.dart';
 
 class SalesOrderViewScreen extends StatefulWidget {

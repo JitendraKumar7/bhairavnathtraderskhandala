@@ -1,5 +1,3 @@
-
-
 import '../base/libraryExport.dart';
 
 class LinkUserLedgerScreen extends StatefulWidget {

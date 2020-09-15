@@ -1,5 +1,3 @@
-
-
 import './base/libraryExport.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -18,117 +16,117 @@ class _CategoryState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     HttpClient().landingPage().then((source) => {
-      setState(() {
-        Map response = jsonDecode(source);
-        if (response['status'] == '200' && response['result'] == 1) {
-          HttpClient().getCoverImage().then((source) => {
-            setState(() {
+          setState(() {
+            Map response = jsonDecode(source);
+            if (response['status'] == '200' && response['result'] == 1) {
+              HttpClient().getCoverImage().then((source) => {
+                    setState(() {
+                      webStore();
+                      loadListing(0);
+                      Map response = jsonDecode(source);
+                      if (response['status'] == '200') {
+                        _slider = List<Map>();
+                        response['result'].forEach((v) {
+                          _slider.add(v);
+                        });
+                      }
+                    })
+                  });
+            } else {
               webStore();
-              loadListing(0);
-              Map response = jsonDecode(source);
-              if (response['status'] == '200') {
-                _slider = List<Map>();
-                response['result'].forEach((v) {
-                  _slider.add(v);
-                });
-              }
-            })
-          });
-        } else {
-          webStore();
-        }
-      })
-    });
+            }
+          })
+        });
 
     onBackPressed();
   }
 
   webStore() {
     ApiClient().getWebstoreL1().then((value) => {
-      print(value.data),
-      setState(() {
-        Map response = value.data;
-        _category = List<Map>();
-        if (response['status'] == '200') {
-          response['result'].forEach((v) {
-            _category.add(v);
-          });
-        }
-      }),
-    });
+          print(value.data),
+          setState(() {
+            Map response = value.data;
+            _category = List<Map>();
+            if (response['status'] == '200') {
+              response['result'].forEach((v) {
+                _category.add(v);
+              });
+            }
+          }),
+        });
   }
 
   onBackPressed() {
     print('Back Pressed');
     String key = AppConstants.USER_CART_DATA;
     AppPreferences.getString(key).then((value) => {
-      setState(() {
-        if (value != null) {
-          cart = List<CartSummery>();
-          for (Map json in jsonDecode(value)) {
-            cart.add(CartSummery.fromJson(json));
-          }
-        }
-      })
-    });
+          setState(() {
+            if (value != null) {
+              cart = List<CartSummery>();
+              for (Map json in jsonDecode(value)) {
+                cart.add(CartSummery.fromJson(json));
+              }
+            }
+          })
+        });
   }
 
   Widget getCart() {
     return cart.isEmpty
         ? IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-          ).then(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OrderCartScreen(),
+                ),
+              ).then(
                 (value) => onBackPressed(),
-          );
-        })
+              );
+            })
         : GFIconBadge(
-      child: GFIconButton(
-        size: GFSize.LARGE,
-        color: Colors.transparent,
-        icon: Icon(Icons.shopping_cart, color: Colors.white),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            child: GFIconButton(
+              size: GFSize.LARGE,
+              color: Colors.transparent,
+              icon: Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => OrderCartScreen(),
+                  ),
+                ).then(
+                  (value) => onBackPressed(),
+                );
+              },
             ),
-          ).then(
-                (value) => onBackPressed(),
+            counterChild: GFBadge(
+              shape: GFBadgeShape.circle,
+              color: Colors.orangeAccent,
+              child: Text(cart.length.toString()),
+            ),
           );
-        },
-      ),
-      counterChild: GFBadge(
-        shape: GFBadgeShape.circle,
-        color: Colors.orangeAccent,
-        child: Text(cart.length.toString()),
-      ),
-    );
   }
 
   loadListing(int pos) {
     HttpClient().getListingData(pos).then((source) => {
-      setState(() {
-        Map response = jsonDecode(source);
-        if (response['status'] == '200') {
-          if (_temp == null) _temp = List<Map>();
-          _temp.add({getTitle(pos): response['result']});
-          if (pos < 3) {
-            loadListing(pos + 1);
-          } else {
-            _list = _temp;
-          }
-        }
-      })
-    });
+          setState(() {
+            Map response = jsonDecode(source);
+            if (response['status'] == '200') {
+              if (_temp == null) _temp = List<Map>();
+              _temp.add({getTitle(pos): response['result']});
+              if (pos < 3) {
+                loadListing(pos + 1);
+              } else {
+                _list = _temp;
+              }
+            }
+          })
+        });
   }
 
   String getTitle(int pos) {
@@ -148,109 +146,109 @@ class _CategoryState extends State<CategoryScreen> {
   Widget getSlider(double _width) {
     return _slider != null
         ? Padding(
-        padding: EdgeInsets.only(bottom: 12),
-        child: GFCarousel(
-            height: 200,
-            items: _slider.map((_image) {
-              return FadeInImage.assetNetwork(
+            padding: EdgeInsets.only(bottom: 12),
+            child: GFCarousel(
                 height: 200,
-                width: _width,
-                image: _image['cover_image'],
-                placeholder: 'images/iv_empty.png',
-              );
-            }).toList(),
-            autoPlay: true,
-            pagination: true,
-            viewportFraction: 1.0,
-            onPageChanged: (index) {
-              setState(() {
-                index;
-              });
-            }))
+                items: _slider.map((_image) {
+                  return FadeInImage.assetNetwork(
+                    height: 200,
+                    width: _width,
+                    image: _image['cover_image'],
+                    placeholder: 'images/iv_empty.png',
+                  );
+                }).toList(),
+                autoPlay: true,
+                pagination: true,
+                viewportFraction: 1.0,
+                onPageChanged: (index) {
+                  setState(() {
+                    index;
+                  });
+                }))
         : SizedBox(height: 0);
   }
 
   Widget getListData(double _width) {
     return _list != null
         ? Column(
-        children: _list.map((item) {
-          List<Widget> children = List();
-          item.forEach((key, value) {
-            print('keys $key');
-            print('item value $value');
-            for (Map product in value) {
-              print('item value 2 $product');
-              children.add(
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ProductDetailScreen(product['id']),
+            children: _list.map((item) {
+            List<Widget> children = List();
+            item.forEach((key, value) {
+              print('keys $key');
+              print('item value $value');
+              for (Map product in value) {
+                print('item value 2 $product');
+                children.add(
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              ProductDetailScreen(product['id']),
+                        ),
+                      ).then(
+                        (value) => {onBackPressed()},
+                      );
+                    },
+                    child: Column(children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(12),
+                        child: FadeInImage.assetNetwork(
+                          image: product['image'],
+                          placeholder: 'images/iv_empty.png',
+                          height: 80,
+                        ),
                       ),
-                    ).then(
-                          (value) => {onBackPressed()},
-                    );
-                  },
-                  child: Column(children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(12),
-                      child: FadeInImage.assetNetwork(
-                        image: product['image'],
-                        placeholder: 'images/iv_empty.png',
-                        height: 80,
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
+                        child: Text(
+                          product['print_name'],
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 12, color: Colors.black87),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
-                      child: Text(
-                        product['print_name'],
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: Colors.black87),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
+                        child: GFRating(
+                            value: 3.5, size: 18, color: Colors.orange),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
-                      child: GFRating(
-                          value: 3.5, size: 18, color: Colors.orange),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
-                      child: Text(
-                        'Price ₹ ${product['trade_price']}',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 15, color: Colors.orange),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(3, 0, 0, 9),
+                        child: Text(
+                          'Price ₹ ${product['trade_price']}',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 15, color: Colors.orange),
+                        ),
                       ),
-                    ),
-                  ]),
-                ),
-              );
-            }
-          });
-          return Column(children: <Widget>[
-            Container(
-              width: _width,
-              decoration: BoxDecoration(color: Colors.grey.shade300),
-              child: Padding(
-                padding: EdgeInsets.all(18),
-                child: Text(
-                  '${item.keys.first.toString().toUpperCase()}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15, color: Colors.black87),
+                    ]),
+                  ),
+                );
+              }
+            });
+            return Column(children: <Widget>[
+              Container(
+                width: _width,
+                decoration: BoxDecoration(color: Colors.grey.shade300),
+                child: Padding(
+                  padding: EdgeInsets.all(18),
+                  child: Text(
+                    '${item.keys.first.toString().toUpperCase()}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15, color: Colors.black87),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              height: 182,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: children,
+              Container(
+                height: 182,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: children,
+                ),
               ),
-            ),
-          ]);
-        }).toList())
+            ]);
+          }).toList())
         : SizedBox(height: 0);
   }
 
@@ -258,17 +256,17 @@ class _CategoryState extends State<CategoryScreen> {
     return Column(children: <Widget>[
       _list != null
           ? Container(
-        width: _width,
-        decoration: BoxDecoration(color: Colors.grey.shade300),
-        child: Padding(
-          padding: EdgeInsets.all(18),
-          child: Text(
-            'ALL CATEGORY',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, color: Colors.black87),
-          ),
-        ),
-      )
+              width: _width,
+              decoration: BoxDecoration(color: Colors.grey.shade300),
+              child: Padding(
+                padding: EdgeInsets.all(18),
+                child: Text(
+                  'ALL CATEGORY',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15, color: Colors.black87),
+                ),
+              ),
+            )
           : SizedBox(height: 0),
       StaggeredGridView.countBuilder(
         crossAxisCount: 2,
@@ -278,9 +276,9 @@ class _CategoryState extends State<CategoryScreen> {
         physics: NeverScrollableScrollPhysics(),
         itemCount: _category.length,
         staggeredTileBuilder: (int index) =>
-        index == _category.length - 1 && _category.length.isOdd
-            ? StaggeredTile.fit(2)
-            : StaggeredTile.fit(1),
+            index == _category.length - 1 && _category.length.isOdd
+                ? StaggeredTile.fit(2)
+                : StaggeredTile.fit(1),
         itemBuilder: (BuildContext context, int index) => Card(
           child: InkWell(
             onTap: () {
@@ -291,7 +289,7 @@ class _CategoryState extends State<CategoryScreen> {
                       SubCategoryL2Screen(id: _category[index]['id']),
                 ),
               ).then(
-                    (value) => onBackPressed(),
+                (value) => onBackPressed(),
               );
             },
             child: Column(children: <Widget>[
@@ -339,58 +337,58 @@ class _CategoryState extends State<CategoryScreen> {
       ),
       body: _category == null
           ? Center(
-        child: GFLoader(loaderColorOne: Colors.white),
-      )
+              child: GFLoader(loaderColorOne: Colors.white),
+            )
           : SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: height),
-          child: Column(children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: MaterialButton(
-                height: 55,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  side: BorderSide(color: Colors.blue.shade300),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ProductSearchScreen(),
-                    ),
-                  ).then(
-                        (value) => onBackPressed(),
-                  );
-                },
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Search',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.blueGrey,
+              scrollDirection: Axis.vertical,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: height),
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: MaterialButton(
+                      height: 55,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        side: BorderSide(color: Colors.blue.shade300),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ProductSearchScreen(),
+                          ),
+                        ).then(
+                          (value) => onBackPressed(),
+                        );
+                      },
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Search',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          Icon(
+                            Icons.search,
+                            color: Colors.blueGrey,
+                          )
+                        ],
                       ),
                     ),
-                    Icon(
-                      Icons.search,
-                      color: Colors.blueGrey,
-                    )
-                  ],
-                ),
+                  ),
+                  getSlider(width),
+                  getListData(width),
+                  getCategory(width),
+                ]),
               ),
             ),
-            getSlider(width),
-            getListData(width),
-            getCategory(width),
-          ]),
-        ),
-      ),
     );
   }
 }
@@ -413,17 +411,17 @@ class _SubCategoryL2State extends State<SubCategoryL2Screen> {
     super.initState();
 
     ApiClient().getWebstoreL2(widget.id).then((value) => {
-      print(value.data),
-      setState(() {
-        Map response = value.data;
-        _list = List();
-        if (response['status'] == '200') {
-          response['result'].forEach((v) {
-            _list.add(v);
-          });
-        }
-      }),
-    });
+          print(value.data),
+          setState(() {
+            Map response = value.data;
+            _list = List();
+            if (response['status'] == '200') {
+              response['result'].forEach((v) {
+                _list.add(v);
+              });
+            }
+          }),
+        });
     onBackPressed();
   }
 
@@ -431,58 +429,58 @@ class _SubCategoryL2State extends State<SubCategoryL2Screen> {
     print('Back Pressed');
     String key = AppConstants.USER_CART_DATA;
     AppPreferences.getString(key).then((value) => {
-      setState(() {
-        if (value != null) {
-          cart = List<CartSummery>();
-          for (Map json in jsonDecode(value)) {
-            cart.add(CartSummery.fromJson(json));
-          }
-        }
-      })
-    });
+          setState(() {
+            if (value != null) {
+              cart = List<CartSummery>();
+              for (Map json in jsonDecode(value)) {
+                cart.add(CartSummery.fromJson(json));
+              }
+            }
+          })
+        });
   }
 
   Widget getCart() {
     return cart.isEmpty
         ? IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-          ).then(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OrderCartScreen(),
+                ),
+              ).then(
                 (value) => onBackPressed(),
-          );
-        })
+              );
+            })
         : GFIconBadge(
-      child: GFIconButton(
-        size: GFSize.LARGE,
-        color: Colors.transparent,
-        icon: Icon(Icons.shopping_cart, color: Colors.white),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            child: GFIconButton(
+              size: GFSize.LARGE,
+              color: Colors.transparent,
+              icon: Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => OrderCartScreen(),
+                  ),
+                ).then(
+                  (value) => onBackPressed(),
+                );
+              },
             ),
-          ).then(
-                (value) => onBackPressed(),
+            counterChild: GFBadge(
+              shape: GFBadgeShape.circle,
+              color: Colors.orangeAccent,
+              child: Text(
+                cart.length.toString(),
+              ),
+            ),
           );
-        },
-      ),
-      counterChild: GFBadge(
-        shape: GFBadgeShape.circle,
-        color: Colors.orangeAccent,
-        child: Text(
-          cart.length.toString(),
-        ),
-      ),
-    );
   }
 
   @override
@@ -503,87 +501,87 @@ class _SubCategoryL2State extends State<SubCategoryL2Screen> {
         padding: EdgeInsets.all(12.0),
         child: _list == null
             ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: GFLoader(loaderColorOne: Colors.white),
-          ),
-        )
+                width: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                  child: GFLoader(loaderColorOne: Colors.white),
+                ),
+              )
             : _list.isEmpty
-            ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Text(
-              'Empty',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        )
-            : GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 3.0,
-          crossAxisSpacing: 3.0,
-          children: List.generate(
-            _list.length,
-                (index) => Card(
-              elevation: 8.0,
-              child: InkWell(
-                onTap: () {
-                  int id = _list[index]['id'];
-                  List<Map> array = _list[index]
-                  ['sub_category_itemwise_array']
-                      .cast<Map>();
-                  if (array.isEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ProductListScreen(
-                              isCategory: true,
-                              id: id,
+                ? Container(
+                    width: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Text(
+                        'Empty',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                : GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 3.0,
+                    crossAxisSpacing: 3.0,
+                    children: List.generate(
+                      _list.length,
+                      (index) => Card(
+                        elevation: 8.0,
+                        child: InkWell(
+                          onTap: () {
+                            int id = _list[index]['id'];
+                            List<Map> array = _list[index]
+                                    ['sub_category_itemwise_array']
+                                .cast<Map>();
+                            if (array.isEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ProductListScreen(
+                                    isCategory: true,
+                                    id: id,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SubCategoryL3Screen(id: id),
+                                ),
+                              ).then(
+                                (value) => onBackPressed(),
+                              );
+                            }
+                          },
+                          child: Column(children: <Widget>[
+                            SizedBox(height: 20),
+                            FadeInImage.assetNetwork(
+                              placeholder: 'images/iv_empty.png',
+                              image: _list[index]['image'],
+                              fit: BoxFit.contain,
+                              height: 60,
                             ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
+                              child: Text(
+                                _list[index]['sub_category'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ]),
+                        ),
                       ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            SubCategoryL3Screen(id: id),
-                      ),
-                    ).then(
-                          (value) => onBackPressed(),
-                    );
-                  }
-                },
-                child: Column(children: <Widget>[
-                  SizedBox(height: 20),
-                  FadeInImage.assetNetwork(
-                    placeholder: 'images/iv_empty.png',
-                    image: _list[index]['image'],
-                    fit: BoxFit.contain,
-                    height: 60,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
-                    child: Text(
-                      _list[index]['sub_category'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold),
                     ),
                   ),
-                ]),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -606,17 +604,17 @@ class _SubCategoryL3State extends State<SubCategoryL3Screen> {
   void initState() {
     super.initState();
     ApiClient().getWebstoreL3(widget.id).then((value) => {
-      print(value.data),
-      setState(() {
-        Map response = value.data;
-        _list = List<Map>();
-        if (response['status'] == '200') {
-          response['result'].forEach((v) {
-            _list.add(v);
-          });
-        }
-      }),
-    });
+          print(value.data),
+          setState(() {
+            Map response = value.data;
+            _list = List<Map>();
+            if (response['status'] == '200') {
+              response['result'].forEach((v) {
+                _list.add(v);
+              });
+            }
+          }),
+        });
     onBackPressed();
   }
 
@@ -624,58 +622,58 @@ class _SubCategoryL3State extends State<SubCategoryL3Screen> {
     print('Back Pressed');
     String key = AppConstants.USER_CART_DATA;
     AppPreferences.getString(key).then((value) => {
-      setState(() {
-        if (value != null) {
-          cart = List<CartSummery>();
-          for (Map json in jsonDecode(value)) {
-            cart.add(CartSummery.fromJson(json));
-          }
-        }
-      })
-    });
+          setState(() {
+            if (value != null) {
+              cart = List<CartSummery>();
+              for (Map json in jsonDecode(value)) {
+                cart.add(CartSummery.fromJson(json));
+              }
+            }
+          })
+        });
   }
 
   Widget getCart() {
     return cart.isEmpty
         ? IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-          ).then(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OrderCartScreen(),
+                ),
+              ).then(
                 (value) => onBackPressed(),
-          );
-        })
+              );
+            })
         : GFIconBadge(
-      child: GFIconButton(
-        size: GFSize.LARGE,
-        color: Colors.transparent,
-        icon: Icon(Icons.shopping_cart, color: Colors.white),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            child: GFIconButton(
+              size: GFSize.LARGE,
+              color: Colors.transparent,
+              icon: Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => OrderCartScreen(),
+                  ),
+                ).then(
+                  (value) => onBackPressed(),
+                );
+              },
             ),
-          ).then(
-                (value) => onBackPressed(),
+            counterChild: GFBadge(
+              shape: GFBadgeShape.circle,
+              color: Colors.orangeAccent,
+              child: Text(
+                cart.length.toString(),
+              ),
+            ),
           );
-        },
-      ),
-      counterChild: GFBadge(
-        shape: GFBadgeShape.circle,
-        color: Colors.orangeAccent,
-        child: Text(
-          cart.length.toString(),
-        ),
-      ),
-    );
   }
 
   @override
@@ -696,82 +694,82 @@ class _SubCategoryL3State extends State<SubCategoryL3Screen> {
         padding: EdgeInsets.all(12.0),
         child: _list == null
             ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: GFLoader(loaderColorOne: Colors.white),
-          ),
-        )
+                width: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                  child: GFLoader(loaderColorOne: Colors.white),
+                ),
+              )
             : _list.isEmpty
-            ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Text(
-              'Empty',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        )
-            : GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
-          children: List.generate(
-            _list.length,
-                (index) => Card(
-              elevation: 8.0,
-              child: InkWell(
-                onTap: () {
-                  int id = _list[index]['id'];
-                  List<Map> array = _list[index]
-                  ['sub_category_itemwise_array']
-                      .cast<Map>();
-                  if (array.isEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ProductListScreen(id: id),
+                ? Container(
+                    width: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Text(
+                        'Empty',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            SubCategoryL4Screen(id: id),
+                    ),
+                  )
+                : GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                    children: List.generate(
+                      _list.length,
+                      (index) => Card(
+                        elevation: 8.0,
+                        child: InkWell(
+                          onTap: () {
+                            int id = _list[index]['id'];
+                            List<Map> array = _list[index]
+                                    ['sub_category_itemwise_array']
+                                .cast<Map>();
+                            if (array.isEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ProductListScreen(id: id),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SubCategoryL4Screen(id: id),
+                                ),
+                              ).then(
+                                (value) => onBackPressed(),
+                              );
+                            }
+                          },
+                          child: Column(children: <Widget>[
+                            SizedBox(height: 20),
+                            Image(
+                              height: 60,
+                              image: AssetImage('images/iv_empty.png'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
+                              child: Text(
+                                _list[index]['product_master_category_name'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ]),
+                        ),
                       ),
-                    ).then(
-                          (value) => onBackPressed(),
-                    );
-                  }
-                },
-                child: Column(children: <Widget>[
-                  SizedBox(height: 20),
-                  Image(
-                    height: 60,
-                    image: AssetImage('images/iv_empty.png'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
-                    child: Text(
-                      _list[index]['product_master_category_name'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold),
                     ),
                   ),
-                ]),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -794,17 +792,17 @@ class _SubCategoryL4State extends State<SubCategoryL4Screen> {
   void initState() {
     super.initState();
     ApiClient().getWebstoreL4(widget.id).then((value) => {
-      print(value.data),
-      setState(() {
-        _list = List<Map>();
-        Map response = value.data;
-        if (response['status'] == '200') {
-          response['result'].forEach((v) {
-            _list.add(v);
-          });
-        }
-      }),
-    });
+          print(value.data),
+          setState(() {
+            _list = List<Map>();
+            Map response = value.data;
+            if (response['status'] == '200') {
+              response['result'].forEach((v) {
+                _list.add(v);
+              });
+            }
+          }),
+        });
     onBackPressed();
   }
 
@@ -812,58 +810,58 @@ class _SubCategoryL4State extends State<SubCategoryL4Screen> {
     print('Back Pressed');
     String key = AppConstants.USER_CART_DATA;
     AppPreferences.getString(key).then((value) => {
-      setState(() {
-        if (value != null) {
-          cart = List<CartSummery>();
-          for (Map json in jsonDecode(value)) {
-            cart.add(CartSummery.fromJson(json));
-          }
-        }
-      })
-    });
+          setState(() {
+            if (value != null) {
+              cart = List<CartSummery>();
+              for (Map json in jsonDecode(value)) {
+                cart.add(CartSummery.fromJson(json));
+              }
+            }
+          })
+        });
   }
 
   Widget getCart() {
     return cart.isEmpty
         ? IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-          ).then(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OrderCartScreen(),
+                ),
+              ).then(
                 (value) => onBackPressed(),
-          );
-        })
+              );
+            })
         : GFIconBadge(
-      child: GFIconButton(
-        size: GFSize.LARGE,
-        color: Colors.transparent,
-        icon: Icon(Icons.shopping_cart, color: Colors.white),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => OrderCartScreen(),
+            child: GFIconButton(
+              size: GFSize.LARGE,
+              color: Colors.transparent,
+              icon: Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => OrderCartScreen(),
+                  ),
+                ).then(
+                  (value) => onBackPressed(),
+                );
+              },
             ),
-          ).then(
-                (value) => onBackPressed(),
+            counterChild: GFBadge(
+              shape: GFBadgeShape.circle,
+              color: Colors.orangeAccent,
+              child: Text(
+                cart.length.toString(),
+              ),
+            ),
           );
-        },
-      ),
-      counterChild: GFBadge(
-        shape: GFBadgeShape.circle,
-        color: Colors.orangeAccent,
-        child: Text(
-          cart.length.toString(),
-        ),
-      ),
-    );
   }
 
   @override
@@ -884,71 +882,71 @@ class _SubCategoryL4State extends State<SubCategoryL4Screen> {
         padding: EdgeInsets.all(12.0),
         child: _list == null
             ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: GFLoader(loaderColorOne: Colors.white),
-          ),
-        )
+                width: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                  child: GFLoader(loaderColorOne: Colors.white),
+                ),
+              )
             : _list.isEmpty
-            ? Container(
-          width: MediaQuery.of(context).size.height,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Text(
-              'Empty',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        )
-            : GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
-          children: List.generate(
-            _list.length,
-                (index) => Card(
-              elevation: 8.0,
-              child: InkWell(
-                onTap: () {
-                  String id = 'product_master_sub_subcat_id';
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ProductListScreen(
-                            id: _list[index][id],
-                            subId: _list[index]['id'],
-                          ),
+                ? Container(
+                    width: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Text(
+                        'Empty',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: Column(children: <Widget>[
-                  SizedBox(height: 20),
-                  Image(
-                    height: 60,
-                    image: AssetImage('images/iv_empty.png'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
-                    child: Text(
-                      _list[index]
-                      ['product_master_sub_category_name'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold),
+                  )
+                : GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                    children: List.generate(
+                      _list.length,
+                      (index) => Card(
+                        elevation: 8.0,
+                        child: InkWell(
+                          onTap: () {
+                            String id = 'product_master_sub_subcat_id';
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ProductListScreen(
+                                  id: _list[index][id],
+                                  subId: _list[index]['id'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(children: <Widget>[
+                            SizedBox(height: 20),
+                            Image(
+                              height: 60,
+                              image: AssetImage('images/iv_empty.png'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(6, 12, 6, 18),
+                              child: Text(
+                                _list[index]
+                                    ['product_master_sub_category_name'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
                     ),
                   ),
-                ]),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

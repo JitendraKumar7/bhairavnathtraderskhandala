@@ -1,12 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 GetIt locator = GetIt.I;
 
 void setupLocator() {
   locator.registerSingleton(UrlLauncherService());
-  locator.registerLazySingleton(() => PushNotificationService());
 }
 
 class UrlLauncherService {
@@ -22,13 +20,3 @@ class UrlLauncherService {
       launch('https://www.google.com/maps/search/?api=1&query=$lat,$lon');
 }
 
-class PushNotificationService {
-
-
-
-}
-
-// Example
-
-//final CallsAndMessagesService _service = locator<CallsAndMessagesService>();
-//_service.call(number)

@@ -34,6 +34,7 @@ export 'package:bhairavnathtraderskhandala/ui/BankingScreen.dart';
 export 'package:bhairavnathtraderskhandala/ui/ContactScreen.dart';
 export 'package:bhairavnathtraderskhandala/ui/DashboardScreen.dart';
 export 'package:bhairavnathtraderskhandala/ui/GalleryScreen.dart';
+export 'package:bhairavnathtraderskhandala/ui/InAppWebViewPage.dart';
 export 'package:bhairavnathtraderskhandala/ui/LocationScreen.dart';
 export 'package:bhairavnathtraderskhandala/ui/AdminLogin.dart';
 export 'package:bhairavnathtraderskhandala/ui/OffersScreen.dart';

@@ -1,8 +1,7 @@
-
-
 import 'ui/base/libraryExport.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   runApp(MyApp());
 }
@@ -32,14 +31,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final PushNotificationService _pushNotificationService =
-      locator<PushNotificationService>();
 
   @override
   void initState() {
     super.initState();
-   // _pushNotificationService.register();
-   // _pushNotificationService.initialise();
 
     if (widget.splash) {
       var duration = const Duration(milliseconds: 3000);
@@ -108,8 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ? Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('images/themes.jpg'),
-                  fit: BoxFit.cover),
+                  image: AssetImage('images/themes.jpg'), fit: BoxFit.cover),
             ),
           )
         : Container(

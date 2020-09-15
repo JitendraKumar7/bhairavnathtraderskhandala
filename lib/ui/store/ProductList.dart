@@ -1,10 +1,6 @@
-
-
-import 'package:dio/dio.dart';
+import 'package:dio/src/response.dart';
 
 import '../base/libraryExport.dart';
-import 'OrderCart.dart';
-import 'ProductDetail.dart';
 
 class ProductListScreen extends StatefulWidget {
   final bool isCategory;
